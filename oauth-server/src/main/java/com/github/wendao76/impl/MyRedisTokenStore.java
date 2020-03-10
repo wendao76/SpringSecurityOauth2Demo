@@ -14,6 +14,10 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 
 import java.util.*;
 
+/**
+ * token 存储引擎
+ * @author wendao76
+ */
 public class MyRedisTokenStore implements TokenStore {
     private static final String ACCESS = "access:";
     private static final String AUTH_TO_ACCESS = "auth_to_access:";

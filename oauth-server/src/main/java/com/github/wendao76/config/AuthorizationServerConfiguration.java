@@ -25,7 +25,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     RedisConnectionFactory redisConnectionFactory;
 
-    private static String RESOURCE_NAME = "order"
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         String finalSecret = "{bcrypt}" + new BCryptPasswordEncoder().encode("123456");
