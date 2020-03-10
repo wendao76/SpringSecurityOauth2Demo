@@ -4,3 +4,4 @@
 /eureka-server/eureka-server.iml
 /resource-server/*.iml
 /oauth-server/*.iml
+/oauth-server/target/

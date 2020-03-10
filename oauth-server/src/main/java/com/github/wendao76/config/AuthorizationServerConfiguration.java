@@ -32,7 +32,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         // 配置两个客户端，一个用于password认证一个用于client认证
         clients.inMemory().withClient("client_1")
                 .resourceIds(Utils.RESOURCEIDS.ORDER)
-                .authorizedGrantTypes("client_credentials", "refresh_token")
+                .authorizedGrantTypes("client_credentials", "refresh_token", "authorization_code")
                 .scopes("select")
                 .authorities("oauth2")
                 .secret(finalSecret)

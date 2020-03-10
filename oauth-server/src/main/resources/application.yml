@@ -5,7 +5,7 @@ spring:
     host: 192.168.137.128
     database: 0
 server:
-  port: 9098
+  port: 9000
 eureka:
   client:
     service-url:
