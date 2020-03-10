@@ -6,6 +6,10 @@ spring:
     database: 0
 server:
   port: 9000
+security:
+  oauth2:
+    client:
+      registered-redirect-uri: http://example
 eureka:
   client:
     service-url:
