@@ -5,3 +5,5 @@
 /resource-server/*.iml
 /oauth-server/*.iml
 /oauth-server/target/
+/eureka-server/target/
+/resource-server/target/
