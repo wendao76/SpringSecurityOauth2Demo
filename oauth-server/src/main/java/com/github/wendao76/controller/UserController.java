@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
+/**
+ * @author wendao76
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {

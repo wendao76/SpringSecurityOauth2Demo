@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
- * @author tiger
+ * @author wendao76
  */
 @Configuration
 @EnableWebSecurity

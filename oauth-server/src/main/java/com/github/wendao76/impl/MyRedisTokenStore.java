@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.provider.token.DefaultAuthenticationK
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.JdkSerializationStrategy;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStoreSerializationStrategy;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -18,6 +19,7 @@ import java.util.*;
  * token 存储引擎
  * @author wendao76
  */
+@Component
 public class MyRedisTokenStore implements TokenStore {
     private static final String ACCESS = "access:";
     private static final String AUTH_TO_ACCESS = "auth_to_access:";
