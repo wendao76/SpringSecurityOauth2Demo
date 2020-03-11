@@ -26,7 +26,8 @@ security:
       id: client_2
       client-secret: 123456
       access-token-uri: http://localhost:9000/oauth/token
-      grant-type: client_credentials,password
+      user-authorization-uri: http://localhost:9000/oauth/authorize
+#      grant-type: client_credentials,password,
       scope: server
 
 
