@@ -3,20 +3,19 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 server:
-  port: 8765
+  port: 8080
 spring:
   application:
     name: service-hi
-#  datasource:
-#      driver-class-name: com.mysql.jdbc.Driver
-#      url: jdbc:mysql://172.16.10.44:3306/spring-cloud-auth?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
-#      username: dev
-#      password: NHdev2015
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.137.128:3306/spring-cloud-oauth2-db?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 security:
   oauth2:

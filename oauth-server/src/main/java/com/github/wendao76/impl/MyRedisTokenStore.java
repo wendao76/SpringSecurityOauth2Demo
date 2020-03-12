@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 /**
- * token 存储引擎
+ * token 存储引擎(非redis方式不用考虑)
  * @author wendao76
  */
-@Component
+//@Component
 public class MyRedisTokenStore implements TokenStore {
     private static final String ACCESS = "access:";
     private static final String AUTH_TO_ACCESS = "auth_to_access:";
