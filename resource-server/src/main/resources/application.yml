@@ -6,7 +6,7 @@ server:
   port: 8080
 spring:
   application:
-    name: service-hi
+    name: resource-server
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.137.128:3306/spring-cloud-oauth2-db?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
@@ -20,13 +20,14 @@ spring:
 security:
   oauth2:
     resource:
-      user-info-uri: http://localhost:9000/users/current
+      jwt:
+        key-uri: http://localhost:9098/oauth/token_key
     client:
       id: client_2
       client-secret: 123456
-      access-token-uri: http://localhost:9000/oauth/token
-      user-authorization-uri: http://localhost:9000/oauth/authorize
-#      grant-type: client_credentials,password,
+      access-token-uri: http://localhost:9098/oauth/token
+      grant-type: password
       scope: server
+      user-authorization-uri: http://localhost:9098/oauth/authorize
 
 

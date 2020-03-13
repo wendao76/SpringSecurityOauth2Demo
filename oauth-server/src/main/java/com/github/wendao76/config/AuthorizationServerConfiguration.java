@@ -1,80 +1,78 @@
 package com.github.wendao76.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.http.HttpMethod;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.sql.DataSource;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author wendao76
- */
 @Configuration
+@EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+
+    @Autowired
+    @Qualifier("authenticationManagerBean")
+    AuthenticationManager authenticationManager;
+
     @Autowired
     private DataSource dataSource;
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    RedisConnectionFactory redisConnectionFactory;
-
-    @Autowired
     private TokenStore tokenStore;
 
-    @Qualifier("clientDetailsService2")
+    @Qualifier("clientDetailsServiceBean")
     @Autowired
     private ClientDetailsService clientDetailsService;
 
-    @Qualifier("userDetailsServiceImpl")
-    @Autowired
-    private UserDetailsService userDetailsService;
+
+    static final Logger logger = LoggerFactory.getLogger(AuthorizationServerConfiguration.class);
 
     @Bean
     public TokenStore tokenStore() {
-        return new JdbcTokenStore(dataSource);
+        return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
     @Bean
-    public ClientDetailsService clientDetailsService2() {
-        JdbcClientDetailsService cliService = new JdbcClientDetailsService(dataSource);
-        return cliService;
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("test-jwt.jks"), "test123".toCharArray());
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setKeyPair(keyStoreKeyFactory.getKeyPair("test-jwt"));
+        return converter;
     }
+
+    @Bean
+    public ClientDetailsService clientDetailsServiceBean() {
+        return new JdbcClientDetailsService(dataSource);
+    }
+
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.withClientDetails(clientDetailsService);
+
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-//        endpoints.tokenStore(new MyRedisTokenStore(redisConnectionFactory))
-//                .userDetailsService(userDetailsService)
-//                .authenticationManager(authenticationManager)
-//                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
-        // 存数据库
-        endpoints.tokenStore(tokenStore).authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService)
-                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);;
+        endpoints.tokenStore(tokenStore).tokenEnhancer(jwtAccessTokenConverter()).authenticationManager(authenticationManager);
 
         // 配置tokenServices参数
         DefaultTokenServices tokenServices = new DefaultTokenServices();
@@ -82,7 +80,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         tokenServices.setSupportRefreshToken(false);
         tokenServices.setClientDetailsService(endpoints.getClientDetailsService());
         tokenServices.setTokenEnhancer(endpoints.getTokenEnhancer());
-        tokenServices.setAccessTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30)); // 30天
+        tokenServices.setAccessTokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(30)); // 30天
         endpoints.tokenServices(tokenServices);
     }
 

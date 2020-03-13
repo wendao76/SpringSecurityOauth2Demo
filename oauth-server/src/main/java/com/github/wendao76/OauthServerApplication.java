@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  */
 @SpringBootApplication
 @EnableEurekaClient
-@EnableAuthorizationServer
 @EnableResourceServer
 @ComponentScan(basePackages = {"com.github.wendao76.*"})
 public class OauthServerApplication {

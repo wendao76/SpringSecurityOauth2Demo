@@ -14,7 +14,7 @@ spring:
       ddl-auto: update
     show-sql: true
 server:
-  port: 9000
+  port: 9098
 security:
   oauth2:
     client:
